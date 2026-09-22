@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Apology · soft purple pink</title>
+  <style>
+    /* ============ RESET & TOKENS ============ */
+    :root {
+      --white: #FFFFFF;
+      --baby-pink-soft: #FFF5F8;
+      --baby-pink-light: #FDE8F0;
+      --baby-pink-mid: #F8C8DC;
+      --baby-pink-deep: #F4A6C1;
+      --baby-pink-dark: #E882A7;
+      --ink: #5C434E;
+      --ink-soft: #9A7B89;
+      --ink-faint: #D4B2C1;
+      --line: #FDE2EC;
+      --paper: #FFF5F8;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --ease: cubic-bezier(.22,.61,.36,1);
+      --ease-out: cubic-bezier(.16,1,.3,1);
+      --spring: cubic-bezier(.34,1.56,.64,1);
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    *, *::before, *::after { box-sizing: inherit; }
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+      scroll-behavior: smooth;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============ SOFT PURPLE + PINK GRID BACKGROUND ============ */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(#e8d9f0 1.2px, transparent 1.2px),
+        linear-gradient(90deg, #f0d9e6 1.2px, transparent 1.2px),
+        linear-gradient(#f5e6f0 1.2px, transparent 1.2px),
+        linear-gradient(90deg, #f5e6f0 1.2px, transparent 1.2px);
+      background-size: 86px 86px, 86px 86px, 21.5px 21.5px, 21.5px 21.5px;
+      background-color: #fdf7fb;
+      opacity: 0.9;
+    }
+    .top-cloud {
+      position: fixed;
+      top: -74px;
+      left: -40px;
+      width: 760px;
+      height: 235px;
+      background: #dfd0ee;
+      border-radius: 0 0 48% 42%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+    .top-cloud:after,
+    .top-cloud:before {
+      content: "";
+      position: absolute;
+      background: #dfd0ee;
+      border-radius: 50%;
+    }
+    .top-cloud:after { right: 105px; top: 20px; width: 190px; height: 115px; }
+    .top-cloud:before { left: 205px; top: 18px; width: 185px; height: 120px; }
+
+    /* ============ REEL & SCENES ============ */
+    .reel {
+      position: relative;
+      z-index: 2;
+      height: 100dvh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--baby-pink-mid) transparent;
+      background: transparent;
+    }
+    .reel::-webkit-scrollbar { width: 3px; }
+    .reel::-webkit-scrollbar-track { background: transparent; }
+    .reel::-webkit-scrollbar-thumb { background: var(--baby-pink-mid); border-radius: 10px; }
+
+    .scene {
+      min-height: 100dvh;
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 9vh 6vw;
+      text-align: center;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .scene[data-scene="3"],
+    .scene[data-scene="6"] { overflow: visible; }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: var(--bg, transparent);
+      opacity: 0.5;
+      transition: background 1200ms var(--ease);
+    }
+
+    /* ============ TYPOGRAPHY ============ */
+    .kicker {
+      font-family: var(--sans);
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 1.6rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    .line {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-style: normal;
+      line-height: 1.36;
+      color: var(--ink);
+      max-width: 20ch;
+      margin: 0 auto;
+      letter-spacing: .01em;
+    }
+    .line.small { font-size: clamp(1.1rem, 4.4vw, 1.45rem); }
+    .line.big { font-size: clamp(2rem, 9vw, 3.2rem); }
+    .line.mid { font-size: clamp(1.4rem, 5.6vw, 1.95rem); }
+
+    .support {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: clamp(.9rem, 3.4vw, .98rem);
+      line-height: 1.8;
+      color: var(--ink-soft);
+      max-width: 32ch;
+      margin: 1.2rem auto 0;
+      letter-spacing: .01em;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      filter: blur(5px);
+      transition: opacity 1100ms var(--ease-out), transform 1100ms var(--ease-out), filter 1100ms var(--ease-out);
+      will-change: opacity, transform, filter;
+    }
+    .in-view .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+    .reveal.d1 { transition-delay: 160ms; }
+    .reveal.d2 { transition-delay: 480ms; }
+    .reveal.d3 { transition-delay: 820ms; }
+    .reveal.d4 { transition-delay: 1140ms; }
+
+    .in-view .kicker {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 900ms var(--ease) 80ms, transform 900ms var(--ease) 80ms;
+    }
+
+    /* ============ BUTTONS ============ */
+    button.soft {
+      appearance: none;
+      border: 1px solid var(--baby-pink-mid);
+      background: rgba(255,245,248,0.85);
+      backdrop-filter: blur(8px);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .02em;
+      padding: .9rem 1.8rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 300ms var(--spring), box-shadow 400ms var(--ease), background 400ms var(--ease), border-color 400ms var(--ease);
+      box-shadow: 0 1px 3px rgba(244, 166, 193, .12);
+      -webkit-user-select: none;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    button.soft:active { transform: scale(.95); }
+    button.soft:hover {
+      background: var(--baby-pink-light);
+      border-color: var(--baby-pink-deep);
+      box-shadow: 0 8px 24px rgba(244, 166, 193, .22);
+    }
+    button.soft:focus-visible {
+      outline: 2px solid var(--baby-pink-mid);
+      outline-offset: 3px;
+    }
+    .tapzone {
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* ============ RESET BUTTON (scene 4) ============ */
+    .reset-btn {
+      display: none;
+      margin: 1rem auto 0;
+      font-size: .8rem;
+      padding: .55rem 1.3rem;
+    }
+    .reset-btn.show { display: inline-block; }
+
+    /* ============ SORRY BEAR (bluesorry.gif) ============ */
+    .sorry-bear {
+      display: block;
+      margin: 0 auto;
+      border-radius: 22px;
+      /* drop-shadow hugs the actual bear silhouette, not a boxy frame */
+      filter: drop-shadow(0 14px 26px rgba(180, 200, 235, .35))
+              drop-shadow(0 4px 10px rgba(244, 166, 193, .18));
+      animation: bearFloat 4.6s ease-in-out infinite;
+      transform-origin: center;
+      will-change: transform;
+      image-rendering: -webkit-optimize-contrast;
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+    }
+    @keyframes bearFloat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50%      { transform: translateY(-6px) rotate(1deg); }
+    }
+
+    /* Small version — Scene 1, above the seal */
+    .sorry-bear.small {
+      width: min(38vw, 130px);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: none;
+    }
+    .in-view .sorry-bear.small {
+      animation: bearEntrance 900ms var(--ease-out) 200ms forwards,
+                 bearFloat 4.6s ease-in-out 1200ms infinite;
+    }
+    @keyframes bearEntrance {
+      to { opacity: 1; transform: translateY(0) rotate(-1deg); }
+    }
+
+    /* Medium version — Scene 7, above envelope */
+    .sorry-bear.medium {
+      width: min(46vw, 170px);
+      margin-bottom: .8rem;
+    }
+
+    /* ============ CAT ============ */
+    .cat { display: block; overflow: visible; }
+    .cat .fur { fill: #FFFFFF; }
+    .cat .fur-dk { fill: var(--baby-pink-light); }
+    .cat .line-s { stroke: var(--baby-pink-mid); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+    .cat .nose { fill: var(--baby-pink-deep); stroke: none; }
+    .cat .eye { fill: var(--ink); transform-origin: center; transform-box: fill-box; transition: transform 300ms var(--ease); }
+    .cat .shine { fill: #FFFFFF; opacity: .9; transition: opacity 300ms var(--ease); }
+    .cat .blush { fill: var(--baby-pink-mid); opacity: .5; transition: opacity 400ms var(--ease), transform 400ms var(--ease); transform-origin: center; transform-box: fill-box; }
+    .cat .whisker { stroke: var(--baby-pink-mid); stroke-width: .9; stroke-linecap: round; opacity: .5; fill: none; }
+
+    .cat.blink .eye { animation: blink 300ms ease; }
+    @keyframes blink {
+      0%, 100% { transform: scaleY(1); }
+      45% { transform: scaleY(.08); }
+    }
+
+    .cat .ear-l { transform: rotate(-14deg); transform-origin: 30px 46px; transition: transform 500ms var(--spring); }
+    .cat .ear-r { transform: rotate(14deg); transform-origin: 110px 46px; transition: transform 500ms var(--spring); }
+    .cat.twitch .ear-l { transform: rotate(-28deg); }
+    .cat.twitch .ear-r { transform: rotate(4deg); }
+
+    .cat .tail { transform-origin: 106px 118px; animation: swish 4s ease-in-out infinite; }
+    @keyframes swish {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .cat-wrap { animation: breathe 4.8s ease-in-out infinite; transform-origin: bottom center; }
+    @keyframes breathe {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-2px) scale(1.008); }
+    }
+
+    .cat.emoji-calm .eye { transform: scaleY(.85); }
+    .cat.emoji-calm .blush { opacity: .6; transform: scale(1.05); }
+    .cat.emoji-warm .eye { transform: scaleY(.5) translateY(1px); }
+    .cat.emoji-warm .blush { opacity: .75; transform: scale(1.15); }
+    .cat.emoji-tender .eye { transform: scaleY(.35) translateY(1.5px); }
+    .cat.emoji-tender .blush { opacity: .85; transform: scale(1.25); }
+    .cat.emoji-shy .eye { transform: scaleY(.2) translateY(2px); }
+    .cat.emoji-shy .blush { opacity: .9; transform: scale(1.35); }
+    .cat.emoji-sleepy .eye { transform: scaleY(.12); }
+    .cat.emoji-sleepy .blush { opacity: .6; }
+    .cat.emoji-sad .eye { transform: scaleY(.7) translateY(1.5px); }
+
+    .cat .cat-face { transition: transform 700ms var(--spring); transform-origin: center; }
+
+    @keyframes nod {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      35% { transform: translateY(3px) rotate(2deg); }
+      70% { transform: translateY(-1px) rotate(-1deg); }
+    }
+    .cat.nod { animation: nod 1200ms var(--ease); }
+
+    @keyframes leanIn {
+      0%, 100% { transform: translateX(0) rotate(0); }
+      50% { transform: translateX(5px) rotate(-3deg); }
+    }
+    .cat.lean-in { animation: leanIn 2400ms var(--ease) infinite; }
+
+    @keyframes sway {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-3px) rotate(1.5deg); }
+    }
+    .cat.sway { animation: sway 5s ease-in-out infinite; }
+
+    /* ============ PARTICLES ============ */
+    .particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    /* ============ SCENE 1 — OPENING ============ */
+    .opening-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .opening-seal {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 2.4rem;
+      cursor: pointer;
+    }
+    .opening-seal svg {
+      width: 100%;
+      height: 100%;
+      transition: transform 800ms var(--spring);
+    }
+    .opening-seal:hover svg { transform: scale(1.06); }
+    .opening-seal.opened svg { transform: scale(1.15) rotate(8deg); }
+    .seal-hint {
+      font-family: var(--sans);
+      font-size: .78rem;
+      letter-spacing: .06em;
+      color: var(--ink-faint);
+      margin-top: 1rem;
+      opacity: 0.8;
+      animation: hintPulse 3s ease-in-out infinite;
+    }
+    @keyframes hintPulse {
+      0%, 100% { opacity: .5; }
+      50% { opacity: .9; }
+    }
+
+    /* ============ SCENE 2 ============ */
+    .cat-paper-scene {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .paper-holder {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .paper {
+      position: relative;
+      z-index: 3;
+      background: var(--paper);
+      border: 1px solid var(--baby-pink-mid);
+      border-radius: 12px;
+      padding: 1.8rem 1.6rem;
+      box-shadow: 0 22px 44px -22px rgba(244, 166, 193, .3), 0 4px 12px rgba(244, 166, 193, .1);
+      max-width: 280px;
+      width: 100%;
+      transform: rotate(-1deg);
+      transition: transform 600ms var(--spring), box-shadow 600ms var(--ease);
+    }
+    .paper:hover {
+      transform: rotate(0deg) translateY(-2px);
+      box-shadow: 0 28px 50px -24px rgba(244, 166, 193, .4), 0 4px 12px rgba(244, 166, 193, .15);
+    }
+    .paper-text {
+      font-family: var(--serif);
+      font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+      line-height: 1.6;
+      color: var(--ink);
+      margin: 0;
+      transition: opacity 500ms var(--ease);
+    }
+    .paper-text.fade { opacity: 0; }
+    .cat-holder {
+      position: relative;
+      margin-top: -24px;
+      z-index: 2;
+    }
+
+    /* ============ SCENE 3 — HEART FORMATION ============ */
+    .heart-formation {
+      position: relative;
+      width: min(92vw, 420px);
+      height: 280px;
+      margin: 0 auto;
+    }
+    .heart-formation svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .heart-formation .heart-outline {
+      fill: none;
+      stroke: var(--baby-pink-mid);
+      stroke-width: 1.5;
+      stroke-dasharray: 6 8;
+      opacity: 0.7;
+      animation: heartDash 20s linear infinite;
+    }
+    @keyframes heartDash {
+      to { stroke-dashoffset: -280; }
+    }
+    .heart-formation .heart-fill {
+      fill: url(#heartGrad);
+      opacity: 0;
+      transform-origin: center;
+      transform-box: fill-box;
+      transition: opacity 1.6s var(--ease), transform 1.6s var(--ease);
+      transform: scale(0.6);
+    }
+    .heart-formation.formed .heart-fill {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+
+    /* ============ SCENE 4 — WORD GATHERING ============ */
+    .word-field {
+      position: relative;
+      width: min(90vw, 420px);
+      height: 220px;
+      margin: 0 auto;
+    }
+    .floaty-word {
+      position: absolute;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      padding: .4rem .8rem;
+      cursor: pointer;
+      transition: transform 800ms var(--spring), opacity 800ms var(--ease), color 500ms;
+      animation: drift 8s ease-in-out infinite;
+      will-change: transform;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .floaty-word:hover {
+      color: var(--ink);
+      transform: scale(1.08);
+    }
+    .floaty-word.used {
+      opacity: 0;
+      transform: scale(.3) rotate(15deg);
+      pointer-events: none;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .built-words {
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 4.4vw, 1.4rem);
+      color: var(--ink);
+      max-width: 24ch;
+      min-height: 3.6em;
+      line-height: 1.6;
+      transition: all 500ms var(--ease);
+    }
+    .built-words .placeholder {
+      opacity: .35;
+      font-style: italic;
+    }
+
+    /* ============ SCENE 5 — LISTENING CAT ============ */
+    .listening-scene {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .listening-card {
+      position: relative;
+      z-index: 3;
+      background: var(--paper);
+      border: 1px solid var(--baby-pink-mid);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      box-shadow: 0 18px 38px -20px rgba(244, 166, 193, .25);
+      max-width: 300px;
+      width: 100%;
+      margin-bottom: -18px;
+      transform: rotate(-0.8deg);
+    }
+    .listening-card p {
+      font-family: var(--serif);
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      line-height: 1.6;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    /* ============ SCENE 6 — FLOWER ============ */
+    .flower-scene {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .flower-click {
+      position: relative;
+      cursor: pointer;
+      transition: transform 600ms var(--spring);
+      overflow: visible;
+    }
+    .flower-click:hover { transform: scale(1.05); }
+    .petal {
+      transform-origin: 60px 76px;
+      transform: rotate(var(--ang, 0deg));
+      transition: transform 1.4s var(--spring);
+    }
+    .flower-click.open .petal {
+      transform: rotate(var(--ang, 0deg)) translateY(-8px) scale(1.12);
+    }
+    .petal-drift {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--baby-pink-mid);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .flower-click.open .petal-drift {
+      animation: petalFloat 3s var(--ease-out) forwards;
+    }
+    @keyframes petalFloat {
+      0% { opacity: 0; transform: translateY(0) scale(.5); }
+      20% { opacity: .8; }
+      100% { opacity: 0; transform: translateY(-80px) translateX(var(--dx, 10px)) scale(.8) rotate(60deg); }
+    }
+
+    /* ============ SCENE 7 — ENVELOPE ============ */
+    .env-scene {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .envelope {
+      position: relative;
+      width: 160px;
+      height: 110px;
+      cursor: pointer;
+      transition: transform 400ms var(--spring);
+      overflow: visible;
+    }
+    .envelope:hover { transform: scale(1.04); }
+    .env-back {
+      position: absolute;
+      inset: 0;
+      background: var(--baby-pink-light);
+      border-radius: 8px;
+      box-shadow: 0 18px 34px -18px rgba(244, 166, 193, .35);
+    }
+    .env-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 56px;
+      background: var(--baby-pink-mid);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 800ms var(--spring);
+      border-radius: 8px 8px 0 0;
+      z-index: 4;
+    }
+    .envelope.open .env-flap { transform: rotateX(155deg); }
+    .env-letter {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 16px;
+      background: var(--paper);
+      border: 1px solid var(--baby-pink-mid);
+      border-radius: 6px;
+      padding: 16px 14px;
+      font-family: var(--serif);
+      font-size: .95rem;
+      color: var(--ink);
+      box-shadow: 0 12px 24px -12px rgba(244, 166, 193, .3);
+      opacity: 0;
+      transform: translateY(12px) scale(.9);
+      transition: opacity 800ms var(--ease) 200ms, transform 800ms var(--spring) 200ms;
+      text-align: center;
+      line-height: 1.65;
+      z-index: 5;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    .envelope.open .env-letter {
+      opacity: 1;
+      transform: translateY(-50px) scale(1);
+    }
+
+    /* ============ FINAL ============ */
+    .final-note {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      color: var(--ink-soft);
+      margin-top: 2rem;
+      opacity: 0;
+      transition: opacity 1.4s var(--ease) 600ms;
+    }
+    .final-note.show { opacity: 1; }
+
+    ::selection {
+      background: var(--baby-pink-mid);
+      color: var(--ink);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media (min-width: 720px) {
+      .scene { padding: 8vh 10vw; }
+      .reel { scroll-snap-type: y proximity; }
+    }
+
+    /* ============ PAW DECOS (SVG) ============ */
+    .paw-deco {
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.28;
+      user-select: none;
+    }
+    .paw-deco svg { display: block; }
+    .paw-deco.one { top: 12%; left: 6%; transform: rotate(-15deg); }
+    .paw-deco.two { bottom: 8%; right: 4%; transform: rotate(10deg); }
+    .paw-deco.three { top: 40%; right: 10%; transform: rotate(25deg); }
+  </style>
+</head>
+<body>
+
+<!-- SOFT PURPLE + PINK GRID BACKGROUND -->
+<div class="bg-grid"></div>
+<div class="top-cloud"></div>
+
+<!-- SVG PAW DECOS -->
+<span class="paw-deco one" aria-hidden="true">
+  <svg width="44" height="44" viewBox="0 0 44 44" fill="#d9b8d0">
+    <ellipse cx="12" cy="12" rx="4.5" ry="6"/>
+    <ellipse cx="22" cy="9" rx="4.5" ry="6"/>
+    <ellipse cx="32" cy="12" rx="4.5" ry="6"/>
+    <ellipse cx="38" cy="22" rx="4.5" ry="6"/>
+    <ellipse cx="22" cy="30" rx="9" ry="7.5"/>
+  </svg>
+</span>
+<span class="paw-deco two" aria-hidden="true">
+  <svg width="44" height="44" viewBox="0 0 44 44" fill="#e6b8d0">
+    <ellipse cx="12" cy="12" rx="4.5" ry="6"/>
+    <ellipse cx="22" cy="9" rx="4.5" ry="6"/>
+    <ellipse cx="32" cy="12" rx="4.5" ry="6"/>
+    <ellipse cx="38" cy="22" rx="4.5" ry="6"/>
+    <ellipse cx="22" cy="30" rx="9" ry="7.5"/>
+  </svg>
+</span>
+<span class="paw-deco three" aria-hidden="true">
+  <svg width="32" height="32" viewBox="0 0 44 44" fill="#d9b8e0">
+    <ellipse cx="12" cy="12" rx="4.5" ry="6"/>
+    <ellipse cx="22" cy="9" rx="4.5" ry="6"/>
+    <ellipse cx="32" cy="12" rx="4.5" ry="6"/>
+    <ellipse cx="38" cy="22" rx="4.5" ry="6"/>
+    <ellipse cx="22" cy="30" rx="9" ry="7.5"/>
+  </svg>
+</span>
+
+<canvas class="particle-canvas" id="particleCanvas"></canvas>
+
+<!-- AUDIO ELEMENT (always plays, no toggle) -->
+<audio id="bgAudio" src="abhinav.mp3" loop preload="auto" playsinline></audio>
+
+<!-- SVG Baby Pink Gradient Definitions -->
+<svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+  <defs>
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE8F0"/>
+      <stop offset="100%" stop-color="#F4A6C1"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<main class="reel">
+  <!-- SCENE 1 — QUIET (with bluesorry bear) -->
+  <section class="scene" data-scene="1">
+    <div class="opening-wrap reveal">
+      <img class="sorry-bear small" src="bluesorry.gif" alt="a little bear saying sorry">
+      <div class="opening-seal" id="s1-seal">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--baby-pink-mid)" stroke-width="1.4" stroke-dasharray="4 6" opacity=".7"/>
+          <circle cx="60" cy="60" r="44" fill="none" stroke="var(--baby-pink-deep)" stroke-width="1" opacity=".5"/>
+          <path d="M60 84 C 42 66, 24 62, 24 46 C 24 34, 34 26, 46 26 C 54 26, 60 32, 60 32 C 60 32, 66 26, 74 26 C 86 26, 96 34, 96 46 C 96 62, 78 66, 60 84 Z" fill="url(#heartGrad)" stroke="var(--baby-pink-deep)" stroke-width="1.2" opacity=".9"/>
+        </svg>
+      </div>
+      <p class="kicker">a quiet letter for you</p>
+      <p class="line small">hey&hellip;</p>
+      <p class="line small" style="margin-top:.5rem;">can you stay for a little while?</p>
+      <p class="seal-hint">tap the heart to begin</p>
+    </div>
+  </section>
+
+  <!-- SCENE 2 — TEXT HEAVY -->
+  <section class="scene" data-scene="2">
+    <p class="kicker">a small paper, held carefully</p>
+    <div class="cat-paper-scene">
+      <div class="paper-holder reveal d1 tapzone" id="s2-paperholder">
+        <div class="paper" id="s2-paper">
+          <p class="paper-text" id="s2-text">I wanted to say this properly.</p>
+        </div>
+        <div class="cat-holder">
+          <svg class="cat cat-wrap" id="s2-cat" width="150" height="165" viewBox="0 0 140 150" aria-hidden="true">
+            <path class="fur tail" d="M104 122 C 130 116 134 90 116 76"/>
+            <path class="fur" d="M36 150 C 26 118 32 100 70 96 C 108 100 114 118 104 150 Z"/>
+            <ellipse class="fur-dk" cx="52" cy="146" rx="10" ry="6"/>
+            <ellipse class="fur-dk" cx="88" cy="146" rx="10" ry="6"/>
+            <g class="cat-face">
+              <path class="fur" d="M70 8 C56 8 46 20 47 32 C32 26 14 34 13 50 C4 56 2 72 8 86 C2 102 14 120 34 128 C48 136 92 136 106 128 C126 120 138 102 132 86 C138 72 136 56 127 50 C126 34 108 26 93 32 C94 20 84 8 70 8 Z"/>
+              <ellipse class="fur-dk ear-l" cx="30" cy="46" rx="7" ry="10"/>
+              <ellipse class="fur-dk ear-r" cx="110" cy="46" rx="7" ry="10"/>
+              <ellipse class="eye eye-l" cx="52" cy="88" rx="4.6" ry="6.4"/>
+              <ellipse class="eye eye-r" cx="88" cy="88" rx="4.6" ry="6.4"/>
+              <circle class="shine" cx="50.2" cy="85.4" r="1.3"/>
+              <circle class="shine" cx="86.2" cy="85.4" r="1.3"/>
+              <ellipse class="blush" cx="40" cy="101" rx="7" ry="4"/>
+              <ellipse class="blush" cx="100" cy="101" rx="7" ry="4"/>
+              <path class="nose" d="M67 96 q3 -2.4 6 0 q-1.4 3 -3 3 q-1.6 0 -3 -3 Z"/>
+              <path class="line-s mouth" d="M64 102 q6 5 12 0"/>
+              <path class="whisker" d="M28 96 h-16 M30 102 h-17 M112 96 h16 M110 102 h17"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p class="support reveal d2">tap the paper</p>
+  </section>
+
+  <!-- SCENE 3 — QUIET -->
+  <section class="scene" data-scene="3">
+    <p class="kicker">from small pieces, something whole</p>
+    <div class="heart-formation reveal d1" id="s3-heart">
+      <svg viewBox="0 0 400 280" aria-hidden="true">
+        <path class="heart-outline" d="M200 240 C 130 180, 60 170, 60 120 C 60 80, 100 55, 140 55 C 170 55, 200 80, 200 80 C 200 80, 230 55, 260 55 C 300 55, 340 80, 340 120 C 340 170, 270 180, 200 240 Z"/>
+        <path class="heart-fill" d="M200 240 C 130 180, 60 170, 60 120 C 60 80, 100 55, 140 55 C 170 55, 200 80, 200 80 C 200 80, 230 55, 260 55 C 300 55, 340 80, 340 120 C 340 170, 270 180, 200 240 Z"/>
+      </svg>
+    </div>
+    <p class="support reveal d2" id="s3-after" style="opacity:0; transition:opacity 1.2s var(--ease);">everything I feel, gathered gently.</p>
+  </section>
+
+  <!-- SCENE 4 — TEXT HEAVY -->
+  <section class="scene" data-scene="4">
+    <p class="kicker">a few words, gathered slowly</p>
+    <div class="word-field reveal d1" id="s4-field">
+      <span class="floaty-word" data-word="listened" style="top:4%; left:8%;">listen</span>
+      <span class="floaty-word" data-word="understood" style="top:34%; left:58%;">understand</span>
+      <span class="floaty-word" data-word="thought" style="top:66%; left:12%;">think</span>
+      <span class="floaty-word" data-word="cared" style="top:10%; left:64%;">care</span>
+      <span class="floaty-word" data-word="communicated" style="top:80%; left:48%;">communicate</span>
+    </div>
+    <p class="built-words reveal d2" id="s4-sentence"><span class="placeholder">tap a word to begin</span></p>
+    <button class="soft reset-btn reveal d3" id="s4-reset">start again</button>
+    <div class="reveal d3" style="margin-top:1rem;">
+      <svg class="cat sway" id="s4-cat" width="90" height="98" viewBox="0 0 140 150" aria-hidden="true">
+        <path class="fur" d="M40 150 C 30 122 36 104 70 100 C 104 104 110 122 100 150 Z"/>
+        <path class="fur" d="M70 8 C56 8 46 20 47 32 C32 26 14 34 13 50 C4 56 2 72 8 86 C2 102 14 120 34 128 C48 136 92 136 106 128 C126 120 138 102 132 86 C138 72 136 56 127 50 C126 34 108 26 93 32 C94 20 84 8 70 8 Z"/>
+        <ellipse class="fur-dk ear-l" cx="30" cy="46" rx="7" ry="10"/>
+        <ellipse class="fur-dk ear-r" cx="110" cy="46" rx="7" ry="10"/>
+        <ellipse class="eye eye-l" cx="52" cy="88" rx="4.6" ry="6.4"/>
+        <ellipse class="eye eye-r" cx="88" cy="88" rx="4.6" ry="6.4"/>
+        <circle class="shine" cx="50.2" cy="85.4" r="1.3"/>
+        <circle class="shine" cx="86.2" cy="85.4" r="1.3"/>
+        <path class="nose" d="M67 96 q3 -2.4 6 0 q-1.4 3 -3 3 q-1.6 0 -3 -3 Z"/>
+        <path class="line-s mouth" d="M64 102 q6 5 12 0"/>
+        <path class="whisker" d="M28 96 h-16 M30 102 h-17 M112 96 h16 M110 102 h17"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- SCENE 5 — TEXT HEAVY -->
+  <section class="scene" data-scene="5">
+    <div class="listening-scene">
+      <div class="listening-card reveal d1">
+        <p>I hear you. I'm not asking you to respond, or to explain anything back to me. I just want you to know that I understand.</p>
+      </div>
+      <div class="reveal d2">
+        <svg class="cat lean-in" id="s5-cat" width="110" height="118" viewBox="0 0 140 150" aria-hidden="true">
+          <path class="fur" d="M36 150 C 26 118 32 100 70 96 C 108 100 114 118 104 150 Z"/>
+          <path class="fur" d="M70 8 C56 8 46 20 47 32 C32 26 14 34 13 50 C4 56 2 72 8 86 C2 102 14 120 34 128 C48 136 92 136 106 128 C126 120 138 102 132 86 C138 72 136 56 127 50 C126 34 108 26 93 32 C94 20 84 8 70 8 Z"/>
+          <ellipse class="fur-dk ear-l" cx="30" cy="46" rx="7" ry="10"/>
+          <ellipse class="fur-dk ear-r" cx="110" cy="46" rx="7" ry="10"/>
+          <ellipse class="eye eye-l" cx="52" cy="88" rx="4.6" ry="6.4"/>
+          <ellipse class="eye eye-r" cx="88" cy="88" rx="4.6" ry="6.4"/>
+          <circle class="shine" cx="50.2" cy="85.4" r="1.3"/>
+          <circle class="shine" cx="86.2" cy="85.4" r="1.3"/>
+          <ellipse class="blush" cx="40" cy="101" rx="7" ry="4"/>
+          <ellipse class="blush" cx="100" cy="101" rx="7" ry="4"/>
+          <path class="nose" d="M67 96 q3 -2.4 6 0 q-1.4 3 -3 3 q-1.6 0 -3 -3 Z"/>
+          <path class="line-s mouth" d="M64 102 q6 5 12 0"/>
+          <path class="whisker" d="M28 96 h-16 M30 102 h-17 M112 96 h16 M110 102 h17"/>
+        </svg>
+      </div>
+    </div>
+    <p class="support reveal d3" style="margin-top:1.6rem;">You don't have to reply. You don't have to explain anything.<br/>I just wanted to say it properly.</p>
+  </section>
+
+  <!-- SCENE 6 — QUIET -->
+  <section class="scene" data-scene="6">
+    <p class="line small reveal">Some things take time to open.</p>
+    <div class="flower-scene reveal d1" style="margin-top:1.8rem;">
+      <div class="flower-click" id="s6-flower" style="position:relative;">
+        <svg width="130" height="130" viewBox="0 0 120 120" aria-hidden="true">
+          <g>
+            <ellipse class="petal" cx="60" cy="44" rx="13" ry="22" fill="var(--baby-pink-mid)" style="--ang:0deg"/>
+            <ellipse class="petal" cx="60" cy="44" rx="13" ry="22" fill="var(--baby-pink-mid)" style="--ang:72deg"/>
+            <ellipse class="petal" cx="60" cy="44" rx="13" ry="22" fill="var(--baby-pink-mid)" style="--ang:144deg"/>
+            <ellipse class="petal" cx="60" cy="44" rx="13" ry="22" fill="var(--baby-pink-mid)" style="--ang:216deg"/>
+            <ellipse class="petal" cx="60" cy="44" rx="13" ry="22" fill="var(--baby-pink-mid)" style="--ang:288deg"/>
+          </g>
+          <circle cx="60" cy="76" r="10" fill="var(--baby-pink-deep)"/>
+          <circle cx="60" cy="76" r="4" fill="var(--baby-pink-dark)" opacity=".6"/>
+        </svg>
+        <span class="petal-drift" style="left:18%; top:18%; --dx:-16px;"></span>
+        <span class="petal-drift" style="left:72%; top:28%; --dx:18px;"></span>
+        <span class="petal-drift" style="left:48%; top:8%; --dx:4px;"></span>
+      </div>
+      <svg class="cat" id="s6-cat" width="90" height="98" viewBox="0 0 140 150" aria-hidden="true">
+        <path class="fur" d="M40 150 C 30 122 36 104 70 100 C 104 104 110 122 100 150 Z"/>
+        <path class="fur" d="M70 8 C56 8 46 20 47 32 C32 26 14 34 13 50 C4 56 2 72 8 86 C2 102 14 120 34 128 C48 136 92 136 106 128 C126 120 138 102 132 86 C138 72 136 56 127 50 C126 34 108 26 93 32 C94 20 84 8 70 8 Z"/>
+        <ellipse class="fur-dk ear-l" cx="30" cy="46" rx="7" ry="10"/>
+        <ellipse class="fur-dk ear-r" cx="110" cy="46" rx="7" ry="10"/>
+        <ellipse class="eye eye-l" cx="52" cy="88" rx="4.6" ry="6.4"/>
+        <ellipse class="eye eye-r" cx="88" cy="88" rx="4.6" ry="6.4"/>
+        <circle class="shine" cx="50.2" cy="85.4" r="1.3"/>
+        <circle class="shine" cx="86.2" cy="85.4" r="1.3"/>
+        <ellipse class="blush" cx="40" cy="101" rx="7" ry="4"/>
+        <ellipse class="blush" cx="100" cy="101" rx="7" ry="4"/>
+        <path class="nose" d="M67 96 q3 -2.4 6 0 q-1.4 3 -3 3 q-1.6 0 -3 -3 Z"/>
+        <path class="line-s mouth" d="M64 102 q6 5 12 0"/>
+      </svg>
+    </div>
+    <p class="support reveal d2" id="s6-after" style="opacity:0; transition:opacity 900ms var(--ease);">And I understand that.</p>
+  </section>
+
+  <!-- SCENE 7 — TEXT HEAVY (with bluesorry bear, medium) -->
+  <section class="scene" data-scene="7">
+    <img class="sorry-bear medium reveal" src="bluesorry.gif" alt="a little bear saying sorry">
+    <div class="envelope reveal d1 tapzone" id="s7-env">
+      <div class="env-back"></div>
+      <div class="env-flap"></div>
+      <div class="env-letter">
+        <p style="margin:0 0 .8em;">I just wanted you to know that I'm genuinely sorry for hurting you.</p>
+        <p style="margin:0;">That's all. Take care of yourself.</p>
+      </div>
+    </div>
+    <p class="support reveal d2" style="margin-top:1.8rem;" id="s7-hint">tap the envelope</p>
+    <p class="final-note" id="s7-note">with warmth, always.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ============================================================
+  // AUDIO — plays forever, no off switch
+  // ============================================================
+  var audio = document.getElementById('bgAudio');
+  var audioStarted = false;
+
+  function tryPlay() {
+    if (audioStarted) return;
+    var p = audio.play();
+    if (p && p.then) {
+      p.then(function(){ audioStarted = true; }).catch(function(){});
+    }
+  }
+  tryPlay();
+
+  ['pointerdown','touchstart','keydown','scroll','click'].forEach(function(evt){
+    window.addEventListener(evt, tryPlay, { passive: true });
+  });
+
+  audio.addEventListener('pause', function(){
+    if (!audio.ended) setTimeout(function(){ audio.play().catch(function(){}); }, 100);
+  });
+
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden && audio.paused) audio.play().catch(function(){});
+  });
+
+  // ============================================================
+  // PARTICLES
+  // ============================================================
+  var canvas = document.getElementById('particleCanvas');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var animationId = null;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function HeartParticle(x, y, opts) {
+    opts = opts || {};
+    this.x = x;
+    this.y = y;
+    this.size = opts.size || (4 + Math.random() * 4);
+    this.speedX = (Math.random() - 0.5) * 1.2;
+    this.speedY = -(0.4 + Math.random() * 0.8);
+    this.gravity = 0.012;
+    this.life = 0;
+    this.maxLife = opts.maxLife || (120 + Math.random() * 80);
+    this.opacity = 0;
+    this.hue = opts.hue || (335 + Math.random() * 15);
+    this.rotation = Math.random() * Math.PI * 2;
+    this.rotSpeed = (Math.random() - 0.5) * 0.04;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.04 + Math.random() * 0.03;
+  }
+  HeartParticle.prototype.update = function() {
+    this.life++;
+    this.wobble += this.wobbleSpeed;
+    this.x += this.speedX + Math.sin(this.wobble) * 0.6;
+    this.y += this.speedY;
+    this.speedY += this.gravity;
+    this.speedX *= 0.99;
+    this.rotation += this.rotSpeed;
+    var r = this.life / this.maxLife;
+    if (r < 0.15) this.opacity = r / 0.15;
+    else if (r > 0.7) this.opacity = 1 - (r - 0.7) / 0.3;
+    else this.opacity = 1;
+    return this.life < this.maxLife;
+  };
+  HeartParticle.prototype.draw = function() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.globalAlpha = this.opacity * 0.85;
+    ctx.fillStyle = 'hsl(' + this.hue + ', 75%, 83%)';
+    var s = this.size;
+    ctx.beginPath();
+    ctx.moveTo(0, s * 0.35);
+    ctx.bezierCurveTo(-s * 0.9, -s * 0.5, -s * 0.5, -s * 1.1, 0, -s * 0.4);
+    ctx.bezierCurveTo(s * 0.5, -s * 1.1, s * 0.9, -s * 0.5, 0, s * 0.35);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  };
+
+  function SparkleParticle(x, y) {
+    this.x = x; this.y = y;
+    this.size = 2 + Math.random() * 3;
+    this.speedX = (Math.random() - 0.5) * 2.5;
+    this.speedY = (Math.random() - 0.5) * 2.5;
+    this.life = 0; this.maxLife = 30 + Math.random() * 30;
+    this.opacity = 0; this.hue = 335 + Math.random() * 15;
+  }
+  SparkleParticle.prototype.update = function() {
+    this.life++;
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.speedX *= 0.96;
+    this.speedY *= 0.96;
+    var r = this.life / this.maxLife;
+    if (r < 0.2) this.opacity = r / 0.2;
+    else this.opacity = 1 - (r - 0.2) / 0.8;
+    return this.life < this.maxLife;
+  };
+  SparkleParticle.prototype.draw = function() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity * 0.75;
+    ctx.fillStyle = 'hsl(' + this.hue + ', 70%, 86%)';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * (1 - this.life / this.maxLife), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  };
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var i = particles.length;
+    while (i--) {
+      var p = particles[i];
+      if (!p.update()) particles.splice(i, 1);
+      else p.draw();
+    }
+    if (particles.length > 0) animationId = requestAnimationFrame(animateParticles);
+    else animationId = null;
+  }
+
+  function emitHearts(x, y, count, opts) {
+    count = count || 6;
+    for (var i = 0; i < count; i++) {
+      (function(idx) {
+        setTimeout(function() {
+          particles.push(new HeartParticle(
+            x + (Math.random() - 0.5) * 40,
+            y + (Math.random() - 0.5) * 20,
+            opts
+          ));
+        }, idx * 80);
+      })(i);
+    }
+    if (!animationId) animationId = requestAnimationFrame(animateParticles);
+  }
+
+  function emitSparkles(x, y, count) {
+    count = count || 8;
+    for (var i = 0; i < count; i++) particles.push(new SparkleParticle(x, y));
+    if (!animationId) animationId = requestAnimationFrame(animateParticles);
+  }
+
+  // ============================================================
+  // INTERSECTION OBSERVER
+  // ============================================================
+  var scenes = document.querySelectorAll('.scene');
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          var n = e.target.dataset.scene;
+          if (n === '3') triggerHeartFormation();
+          if (n === '5') triggerListening();
+        }
+      });
+    }, { threshold: 0.4 });
+    scenes.forEach(function(s){ io.observe(s); });
+  } else {
+    scenes.forEach(function(s){ s.classList.add('in-view'); });
+    setTimeout(triggerHeartFormation, 800);
+    setTimeout(triggerListening, 800);
+  }
+
+  var heartOutline = document.querySelector('.heart-outline');
+  if (heartOutline && 'IntersectionObserver' in window) {
+    var heartIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        heartOutline.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
+      });
+    }, { threshold: 0.1 });
+    var s3 = document.querySelector('.scene[data-scene="3"]');
+    if (s3) heartIO.observe(s3);
+  }
+
+  // ============================================================
+  // CAT MICRO-INTERACTIONS
+  // ============================================================
+  var cats = Array.prototype.slice.call(document.querySelectorAll('.cat'));
+  cats.forEach(function(cat){
+    cat._blinkAt = performance.now() + 2500 + Math.random() * 3000;
+    cat._twitchAt = performance.now() + 5000 + Math.random() * 5000;
+  });
+
+  function catLoop(now) {
+    cats.forEach(function(cat){
+      if (cat.classList.contains('emoji-sleepy')) return;
+      if (now >= cat._blinkAt) {
+        cat.classList.add('blink');
+        setTimeout(function(){ cat.classList.remove('blink'); }, 320);
+        cat._blinkAt = now + 2800 + Math.random() * 3000;
+      }
+      if (now >= cat._twitchAt) {
+        cat.classList.add('twitch');
+        setTimeout(function(){ cat.classList.remove('twitch'); }, 450);
+        cat._twitchAt = now + 5000 + Math.random() * 5000;
+      }
+    });
+    requestAnimationFrame(catLoop);
+  }
+  requestAnimationFrame(catLoop);
+
+  // ============================================================
+  // SCENE 1 — OPENING SEAL
+  // ============================================================
+  var s1Seal = document.getElementById('s1-seal');
+  if (s1Seal) {
+    s1Seal.addEventListener('click', function(){
+      if (s1Seal.classList.contains('opened')) return;
+      s1Seal.classList.add('opened');
+      var rect = s1Seal.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      emitHearts(cx, cy, 12, { maxLife: 140 });
+      emitSparkles(cx, cy, 10);
+      setTimeout(function(){
+        var next = document.querySelectorAll('.scene')[1];
+        next.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+      }, 700);
+    }, { once: true });
+  }
+
+  // ============================================================
+  // SCENE 2 — CAT WITH PAPER
+  // ============================================================
+  var s2PaperHolder = document.getElementById('s2-paperholder');
+  var s2Text = document.getElementById('s2-text');
+  var s2Cat = document.getElementById('s2-cat');
+  var s2Stage = 0;
+
+  if (s2PaperHolder) {
+    s2PaperHolder.addEventListener('click', function(){
+      s2Stage = (s2Stage + 1) % 2;
+      s2Cat.classList.add('emoji-tender', 'nod');
+      setTimeout(function(){ s2Cat.classList.remove('nod'); }, 1200);
+
+      s2Text.classList.add('fade');
+      setTimeout(function(){
+        s2Text.textContent = s2Stage === 0
+          ? "I wanted to say this properly."
+          : "Not quickly. Not as an excuse. Just honestly.";
+        s2Text.classList.remove('fade');
+        s2Cat.classList.remove('emoji-tender');
+        s2Cat.classList.add('emoji-warm');
+      }, 500);
+
+      var rect = s2Cat.getBoundingClientRect();
+      emitHearts(rect.left + rect.width/2, rect.top, 4, { maxLife: 100 });
+    });
+  }
+
+  // ============================================================
+  // SCENE 3 — HEART FORMATION
+  // ============================================================
+  var s3Heart = document.getElementById('s3-heart');
+  var s3After = document.getElementById('s3-after');
+  var s3Formed = false;
+
+  function triggerHeartFormation() {
+    if (s3Formed || !s3Heart) return;
+    s3Formed = true;
+    setTimeout(function(){
+      s3Heart.classList.add('formed');
+      if (s3After) s3After.style.opacity = 1;
+      var rect = s3Heart.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      for (var i = 0; i < 18; i++) {
+        (function(idx){
+          setTimeout(function(){
+            var angle = (Math.PI * 2 / 18) * idx;
+            var radius = 80 + Math.random() * 60;
+            emitHearts(
+              cx + Math.cos(angle) * radius,
+              cy + Math.sin(angle) * radius * 0.7,
+              2,
+              { maxLife: 120 + Math.random() * 60, size: 3 + Math.random() * 3 }
+            );
+          }, idx * 60);
+        })(i);
+      }
+    }, 400);
+  }
+
+  // ============================================================
+  // SCENE 4 — WORD GATHERING
+  // ============================================================
+  var sentenceParts = {
+    listened: 'I should have listened more.',
+    understood: 'I should have understood more.',
+    thought: 'I should have thought before I spoke.',
+    cared: 'I should have shown I cared, not just felt it.',
+    communicated: 'I should have communicated instead of assuming.'
+  };
+  var wordOrder = ['listened', 'understood', 'thought', 'cared', 'communicated'];
+  var pickedWords = [];
+  var s4Cat = document.getElementById('s4-cat');
+  var s4Reset = document.getElementById('s4-reset');
+  var s4Words = document.querySelectorAll('#s4-field .floaty-word');
+
+  function updateCatMood() {
+    s4Cat.classList.remove('emoji-calm', 'emoji-warm', 'emoji-tender');
+    if (pickedWords.length === 0) return;
+    if (pickedWords.length === 1) s4Cat.classList.add('emoji-calm');
+    else if (pickedWords.length === 2) s4Cat.classList.add('emoji-warm');
+    else s4Cat.classList.add('emoji-tender');
+  }
+
+  s4Words.forEach(function(w){
+    w.addEventListener('click', function(){
+      if (w.classList.contains('used')) return;
+      w.classList.add('used');
+      pickedWords.push(w.dataset.word);
+      renderSentence();
+      updateCatMood();
+
+      s4Cat.classList.add('nod');
+      setTimeout(function(){ s4Cat.classList.remove('nod'); }, 1000);
+
+      var rect = w.getBoundingClientRect();
+      emitSparkles(rect.left + rect.width/2, rect.top + rect.height/2, 4);
+
+      if (pickedWords.length === wordOrder.length) s4Reset.classList.add('show');
+    });
+  });
+
+  if (s4Reset) {
+    s4Reset.addEventListener('click', function(){
+      pickedWords = [];
+      s4Words.forEach(function(w){ w.classList.remove('used'); });
+      renderSentence();
+      updateCatMood();
+      s4Reset.classList.remove('show');
+    });
+  }
+
+  function renderSentence() {
+    var box = document.getElementById('s4-sentence');
+    if (!box) return;
+    var ordered = wordOrder.filter(function(k){ return pickedWords.indexOf(k) !== -1; });
+    if (ordered.length === 0) {
+      box.innerHTML = '<span class="placeholder">tap a word to begin</span>';
+      return;
+    }
+    box.innerHTML = ordered.map(function(k){ return sentenceParts[k]; }).join('<br/>');
+  }
+
+  // ============================================================
+  // SCENE 5 — LISTENING CAT
+  // ============================================================
+  var s5Cat = document.getElementById('s5-cat');
+  var s5Triggered = false;
+
+  function triggerListening() {
+    if (s5Triggered || !s5Cat) return;
+    s5Triggered = true;
+    setTimeout(function(){
+      s5Cat.classList.add('emoji-tender');
+      var rect = s5Cat.getBoundingClientRect();
+      emitHearts(rect.left + rect.width/2, rect.top + rect.height/2, 3, { maxLife: 120 });
+    }, 600);
+  }
+
+  // ============================================================
+  // SCENE 6 — FLOWER OPENING
+  // ============================================================
+  var s6Flower = document.getElementById('s6-flower');
+  var s6After = document.getElementById('s6-after');
+  var s6Cat = document.getElementById('s6-cat');
+
+  if (s6Flower) {
+    s6Flower.addEventListener('click', function(){
+      if (s6Flower.classList.contains('open')) return;
+      s6Flower.classList.add('open');
+      s6Cat.classList.add('emoji-warm', 'nod');
+      setTimeout(function(){ s6Cat.classList.remove('nod'); }, 1000);
+
+      setTimeout(function(){
+        s6After.style.opacity = 1;
+        var rect = s6Flower.getBoundingClientRect();
+        emitSparkles(rect.left + rect.width/2, rect.top + rect.height/2, 8);
+        emitHearts(rect.left + rect.width/2, rect.top, 3, { maxLife: 100 });
+      }, 600);
+    }, { once: true });
+  }
+
+  // ============================================================
+  // SCENE 7 — ENVELOPE
+  // ============================================================
+  var s7Env = document.getElementById('s7-env');
+  var s7Hint = document.getElementById('s7-hint');
+  var s7Note = document.getElementById('s7-note');
+  var s7Cat = document.getElementById('s7-cat');
+
+  if (s7Env) {
+    s7Env.addEventListener('click', function(){
+      if (s7Env.classList.contains('open')) return;
+      s7Env.classList.add('open');
+      s7Hint.style.opacity = 0;
+      s7Cat.classList.add('emoji-tender', 'nod');
+      setTimeout(function(){ s7Cat.classList.remove('nod'); }, 1200);
+
+      setTimeout(function(){
+        s7Note.classList.add('show');
+        var rect = s7Env.getBoundingClientRect();
+        emitHearts(rect.left + rect.width/2, rect.top, 8, { maxLife: 160 });
+        emitSparkles(rect.left + rect.width/2, rect.top + rect.height/2, 12);
+      }, 800);
+    }, { once: true });
+  }
+})();
+</script>
+</body>
+</html>
